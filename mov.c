@@ -23,13 +23,14 @@ int posInicialX = 1, posInicialY = 1;
 int chaveColetada = 0;
 int reinicios = 0;
 int interacao = 0;
+int i, j;
 
 // armazena o que ta embaixo do jogador (pode ser ' ', '@', etc.)
 char embaixoDoJogador = ' ';
 
 void imprimirMapa() {
-    for (int i = 0; i < TAM; i++) {
-        for (int j = 0; j < TAM; j++) {
+    for (i = 0; i < TAM; i++) {
+        for (j = 0; j < TAM; j++) {
             printf("%c ", mapa[i][j]);
         }
         printf("\n");
@@ -80,32 +81,27 @@ void moverJogador(char tecla) {
 }
 
 void interagir() {
-    int x = jogadorX;
-    int y = jogadorY;
 
-    // direções: cima, baixo, esquerda, direita
-    int dx[4] = {0, 0, -1, 1};
-    int dy[4] = {-1, 1, 0, 0};
-
-    for (int i = 0; i < 4; i++) {
-        int nx = x + dx[i];
-        int ny = y + dy[i];
-        char alvo = mapa[ny][nx];
-
-        if (alvo == '@') {
-            chaveColetada = 1;
-            mapa[ny][nx] = ' '; // remove a chave do mapa
-            printf("Você pegou a chave!\n");
-            system("pause");
-        } else if (alvo == 'D' && chaveColetada) {
-            mapa[ny][nx] = '='; // porta aberta
-            printf("Você abriu a porta!\n");
-            system("pause");
-        } else if (alvo == 'O') {
-            printf("Você apertou o botão!\n");
-            system("pause");
+    if (embaixoDoJogador == '@') {
+        chaveColetada = 1;
+        embaixoDoJogador = ' ';
+        printf("Você pegou a chave!\n");
+        for(i = 0; i < TAM; i++){
+            for(j = 0; j < TAM; j++){
+                if(mapa[i][j] == 'D'){
+                    mapa[i][j] = '=';
+                }
+            }
         }
+        system("pause");
+    } else if (embaixoDoJogador == '=' && chaveColetada) {
+        printf("Você abriu a porta!\n");
+        system("pause");
+    } else if (embaixoDoJogador == 'O') {
+        printf("Você apertou o botão!\n");
+        system("pause");
     }
+    
 }
 
 void moverMonstroAleatorio() {
